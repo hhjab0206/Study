@@ -33,29 +33,29 @@ public class XmlToCsv
 		System.out.println(sibling);
 		writer.write(sibling+"\n");
 
-		NodeList musicList = document.getElementsByTagName(sibling);
-		// Element data = (Element) musicList.item(0);
+		// elementList = music 10개
+		NodeList elementList = document.getElementsByTagName(sibling);
 
-		NamedNodeMap dataAttr = musicList.item(0).getAttributes();
-		System.out.println(dataAttr.item(0).getNodeName());
+		// album, artist, genre, release-date, title
+		NamedNodeMap attributes = elementList.item(0).getAttributes();
 
 		List<String> header = new ArrayList<>();
-		for (int i=0; i<dataAttr.getLength(); i++)
+		for (int i=0; i<attributes.getLength(); i++)
 		{
-			Node attr = dataAttr.item(i);
+			Node attr = attributes.item(i);
 			header.add(attr.getNodeName());
 		}
 		System.out.println(String.join(",",header));
 		writer.write(String.join(",",header)+"\n");
 
 		List<String> musicData = new ArrayList<>();
-		for (int i=0; i< musicList.getLength(); i++)
+		for (int i=0; i< elementList.getLength(); i++)
 		{
 			// Node node = musicList.item(i);
-			Element element = (Element) musicList.item(i);
-			for (int j = 0; j<dataAttr.getLength(); j++)
+			Element element = (Element) elementList.item(i);
+			for (int j = 0; j<attributes.getLength(); j++)
 			{
-				Node attr = dataAttr.item(j);
+				Node attr = attributes.item(j);
 				musicData.add(element.getAttribute(attr.getNodeName()));
 			}
 			System.out.println(String.join(",", musicData));
