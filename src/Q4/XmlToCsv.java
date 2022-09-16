@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Test
+public class XmlToCsv
 {
 	public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException
 	{
@@ -22,18 +22,18 @@ public class Test
 
 		FileWriter writer = new FileWriter("C:/study/Study/src/Q4/output.csv");
 
-		// root 구하기
+		// root 구하기 (melonTop10)
 		System.out.println(document.getDocumentElement().getNodeName());
 		writer.write(document.getDocumentElement().getNodeName()+"\n");
 
 		// 첫번째 자식은 무조건 #text
-		Node name = document.getDocumentElement().getFirstChild();
-		// 자식 노드 이름 가져오기
-		String music = name.getNextSibling().getNodeName();
-		System.out.println(music);
-		writer.write(music+"\n");
+		Node firstChild = document.getDocumentElement().getFirstChild();
+		// 자식 노드 이름 가져오기 (music)
+		String sibling = firstChild.getNextSibling().getNodeName();
+		System.out.println(sibling);
+		writer.write(sibling+"\n");
 
-		NodeList musicList = document.getElementsByTagName(music);
+		NodeList musicList = document.getElementsByTagName(sibling);
 		// Element data = (Element) musicList.item(0);
 
 		NamedNodeMap dataAttr = musicList.item(0).getAttributes();
