@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE melonTop10 SYSTEM "C:\study\Study\src\Q4\music.dtd">
+<melonTop10>
+    <music
+            title="After Like"
+            artist="IVE (아이브)"
+            album="After Like"
+            release-date="2022.08.22"
+            genre="댄스"
+    />
+    <music
+            title="Attention"
+            artist="NewJeans"
+            album="NewJeans 1st EP 'New Jeans'"
+            release-date="2022.08.01"
+            genre="댄스"
+    />
+    <music
+            title="Pink Venom"
+            artist="BLACKPINK"
+            album="Pink Venom"
+            release-date="2022.08.19"
+            genre="랩/힙합"
+    />
+    <music
+        title="Hype Boy"
+        artist="NewJeans"
+        album="NewJeans 1st EP 'New Jeans'"
+        release-date="2022.08.01"
+        genre="댄스"
+    />
+    <music
+            title="새삥 (Prod. ZICO) (Feat. 호미들)"
+            artist="지코 (ZICO)"
+            album="스트릿 맨 파이터(SMF) Original Vol.3(계급미션)"
+            release-date="2022.09.06"
+            genre="랩/힙합"
+    />
+    <music
+            title="LOVE DIVE"
+            artist="IVE (아이브)"
+            album="LOVE DIVE"
+            release-date="2022.04.05"
+            genre="댄스"
+    />
+    <music
+            title="FOREVER 1"
+            artist="소녀시대(GIRLS' JENERATION)"
+            album="FOREVER 1 - The 7th Album"
+            release-date="2022.08.05"
+            genre="댄스"
+    />
+    <music
+            title="그때 그 순간 그대로 (그그그)"
+            artist="WSG워너비 (가야G)"
+            album="WSG워너비 1집"
+            release-date="2022.07.09"
+            genre="발라드"
+    />
+    <music
+            title="Cookie"
+            artist="NewJeans"
+            album="NewJeans 1st EP 'New Jeans'"
+            release-date="2022.08.01"
+            genre="댄스"
+    />
+    <music
+        title="사랑은 늘 도망가"
+        artist="임영웅"
+        album="신사와 아가씨 OST Part.2"
+        release-date="2021.10.11"
+        genre="발라드"
+    />
+</melonTop10>
