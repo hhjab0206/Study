@@ -48,7 +48,7 @@ public class XmlToCsv
 		System.out.println(String.join(",",header));
 		writer.write(String.join(",",header)+"\n");
 
-		List<String> musicData = new ArrayList<>();
+		List<String> values = new ArrayList<>();
 		for (int i=0; i< elementList.getLength(); i++)
 		{
 			// Node node = musicList.item(i);
@@ -56,11 +56,11 @@ public class XmlToCsv
 			for (int j = 0; j<attributes.getLength(); j++)
 			{
 				Node attr = attributes.item(j);
-				musicData.add(element.getAttribute(attr.getNodeName()));
+				values.add(element.getAttribute(attr.getNodeName()));
 			}
-			System.out.println(String.join(",", musicData));
-			writer.write(String.join(",", musicData)+"\n");
-			musicData.clear();
+			System.out.println(String.join(",", values));
+			writer.write(String.join(",", values)+"\n");
+			values.clear();
 		}
 		writer.flush();
 		writer.close();
