@@ -58,8 +58,7 @@ public class TreeFinal
 		List<String> children = node.get(start);
 		if (children==null)
 			return;
-		else
-			for (String child : children)
-				DFS(node, child);
+		for (String child : children)
+			DFS(node, child);
 	}
 }
