@@ -17,6 +17,8 @@ public class TreeFinal
 
 		// 원하는 노드 경로
 		// System.out.println(String.join("/", findPath(parents, "L")));
+
+		DFS(tree,"A");
 	}
 	private static Map<String, String> makeParents(Map<String, List<String>> tree)
 	{
@@ -48,5 +50,16 @@ public class TreeFinal
 		while ((node = parents.get(node)) != null)
 			path.add(0, node);
 		return path;
+	}
+
+	public static void DFS(Map<String, List<String>> node, String start)
+	{
+		System.out.print(start + " ");
+		List<String> children = node.get(start);
+		if (children==null)
+			return;
+		else
+			for (String child : children)
+				DFS(node, child);
 	}
 }
