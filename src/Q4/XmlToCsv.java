@@ -36,7 +36,7 @@ public class XmlToCsv
 		// elementList = music 10개
 		NodeList elementList = document.getElementsByTagName(sibling);
 
-		// album, artist, genre, release-date, title
+		// attributes = album, artist, genre, release-date, title
 		NamedNodeMap attributes = elementList.item(0).getAttributes();
 
 		List<String> header = new ArrayList<>();
