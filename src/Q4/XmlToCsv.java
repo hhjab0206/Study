@@ -20,10 +20,10 @@ public class XmlToCsv
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document document = builder.parse("C:/study/Study/src/Q4/music.xml");
 
-		FileWriter writer = new FileWriter("C:/study/Study/src/Q4/output.csv");
 
-		// root 구하기 (melonTop10)
+		// root 구하기 (melon-top-10)
 		System.out.println(document.getDocumentElement().getNodeName());
+		FileWriter writer = new FileWriter("C:/study/Study/src/Q4/output.csv");
 		writer.write(document.getDocumentElement().getNodeName()+"\n");
 
 		// 첫번째 자식은 무조건 #text

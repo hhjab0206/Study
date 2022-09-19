@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE melonTop10 SYSTEM "C:\study\Study\src\Q4\music.dtd">
-<melonTop10>
+<!DOCTYPE melon-top-10 SYSTEM "C:\study\Study\src\Q4\music.dtd">
+<melon-top-10>
     <music
             title="After Like"
             artist="IVE (아이브)"
@@ -71,4 +71,4 @@
             release-date="2022.08.01"
             genre="댄스"
     />
-</melonTop10>
+</melon-top-10>

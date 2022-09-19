@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!ELEMENT melonTop10 (music*)>
+<!ELEMENT melon-top-10 (music*)>
 <!ELEMENT music EMPTY>
 <!ATTLIST music title CDATA #REQUIRED>
 <!ATTLIST music artist CDATA #REQUIRED>
