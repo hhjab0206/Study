@@ -6,8 +6,8 @@ public class Column
 	private String columnName;
 	private String dataType;
 	private int dataLength;
-	private boolean primary;
-	private boolean nullable;
+	private String pk;
+	private int nullable;
 	private String idxName;
 	private String idxColumn;
 
@@ -51,22 +51,22 @@ public class Column
 		this.dataLength = dataLength;
 	}
 
-	public boolean isPrimary()
+	public String getPk()
 	{
-		return primary;
+		return pk;
 	}
 
-	public void setPrimary(boolean primary)
+	public void setPk(String pk)
 	{
-		this.primary = primary;
+		this.pk = pk;
 	}
 
-	public boolean isNullable()
+	public int getNullable()
 	{
 		return nullable;
 	}
 
-	public void setNullable(boolean nullable)
+	public void setNullable(int nullable)
 	{
 		this.nullable = nullable;
 	}
