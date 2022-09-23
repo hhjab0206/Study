@@ -8,8 +8,6 @@ public class Column
 	private int dataLength;
 	private String pk;
 	private int nullable;
-	private String idxName;
-	private String idxColumn;
 
 	public String getTableName()
 	{
@@ -69,25 +67,5 @@ public class Column
 	public void setNullable(int nullable)
 	{
 		this.nullable = nullable;
-	}
-
-	public String getIdxName()
-	{
-		return idxName;
-	}
-
-	public void setIdxName(String idxName)
-	{
-		this.idxName = idxName;
-	}
-
-	public String getIdxColumn()
-	{
-		return idxColumn;
-	}
-
-	public void setIdxColumn(String idxColumn)
-	{
-		this.idxColumn = idxColumn;
 	}
 }
