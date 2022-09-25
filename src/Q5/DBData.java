@@ -1,6 +1,6 @@
 package Q5;
 
-import java.io.*;
+import javax.swing.*;
 import java.sql.*;
 import java.util.*;
 
@@ -12,30 +12,45 @@ public class DBData
 
 		List<Column> columns = getColumns();
 //		getPrimaryKey(tables);
-//		getIndex(tables);
+		getIndex();
 
 	}
-	private static void getIndex(List<String> tables) throws SQLException, ClassNotFoundException, IOException
+
+	public static List<Index> getIndex() throws SQLException, ClassNotFoundException
 	{
-//		Map<String, List<String>> index = new TreeMap<>();
+		List<Index> indexes = new ArrayList<>();
+		String idxName = "";
+
 		try (Connection conn = connectDb())
 		{
-			for (String table : tables)
-				try (ResultSet rs = conn.getMetaData().getIndexInfo(null, "NETS", table, false, false))
+			for (Column table : getTables())
+				try (ResultSet rs = conn.getMetaData().getIndexInfo(null, "NETS", table.getTableName(), false, false))
 				{
-					while (rs.next())
+					List<String> columns = new ArrayList<>();
 
+					while (rs.next())
 					{
-						String tableName = rs.getString("TABLE_NAME");
-						String idxName = rs.getString("INDEX_NAME");
-						String columnName = rs.getString("COLUMN_NAME");
-						if (idxName!=null)
+
+						if (rs.getNString("INDEX_NAME") != null)
 						{
-							Index index1 = new Index();
-							index1.setTableName(rs.getString("TABLE_NAME"));
-							index1.setIdxName(rs.getString("INDEX_NAME"));
-							index1.setIdxColumn(rs.getString("COLUMN_NAME"));
+
+							if (!idxName.equals(rs.getString("INDEX_NAME")))
+							{
+								Index test = new Index();
+								test.setTableName(rs.getString("TABLE_NAME"));
+								test.setIdxName(rs.getString("INDEX_NAME"));
+								columns.add(rs.getString("COLUMN_NAME"));
+
+								test.setColumnName(columns);
+								indexes.add(test);
+							} else
+							{
+								columns.add(rs.getString("COLUMN_NAME"));
+							}
+							idxName = rs.getString("INDEX_NAME");
+
 						}
+
 
 //						if (idxName!=null)
 //						{
@@ -48,6 +63,7 @@ public class DBData
 					}
 				}
 		}
+		return indexes;
 	}
 
 	private static void getPrimaryKey(List<String> tables) throws SQLException, ClassNotFoundException
@@ -60,7 +76,7 @@ public class DBData
 				{
 					while (rs.next())
 					{
-						map.computeIfAbsent(table, v-> new ArrayList<>()).add(rs.getString("COLUMN_NAME"));
+						map.computeIfAbsent(table, v -> new ArrayList<>()).add(rs.getString("COLUMN_NAME"));
 //						List<String> list = new ArrayList<>();
 //						list.add(rs.getString("COLUMN_NAME"));
 //						map.put(table, list);
@@ -74,26 +90,31 @@ public class DBData
 	public static List<Column> getColumns() throws SQLException, ClassNotFoundException
 	{
 		List<Column> columns = new ArrayList<>();
-		List<Column> a = getTables();
 		try (Connection conn = connectDb())
 		{
-			for (Column table : a)
-				try (ResultSet rs = conn.getMetaData().getColumns(null, "NETS", table.getTableName(), null))
+			for (Column table : getTables())
+				try (ResultSet rs = conn.getMetaData().getColumns(null, "NETS", table.getTableName(), null);
+					 ResultSet rsPk = conn.getMetaData().getPrimaryKeys(null, "NETS", table.getTableName()))
 				{
 					while (rs.next())
 					{
-						Column tables = new Column();
-						tables.setTableName(rs.getString("TABLE_NAME"));
-						tables.setColumnName(rs.getString("COLUMN_NAME"));
-						tables.setDataType(rs.getString("TYPE_NAME"));
-						tables.setDataLength(rs.getInt("COLUMN_SIZE"));
-						tables.setNullable(rs.getInt("NULLABLE"));
-						columns.add(tables);
+						Column attr = new Column();
+						attr.setTableName(rs.getString("TABLE_NAME"));
+						attr.setColumnName(rs.getString("COLUMN_NAME"));
+						attr.setDataType(rs.getString("TYPE_NAME"));
+						attr.setDataLength(rs.getInt("COLUMN_SIZE"));
+						while (rsPk.next())
+							if (rs.getString("TABLE_NAME").equals(rsPk.getString("TABLE_NAME"))
+									&& rs.getString("COLUMN_NAME").equals(rsPk.getString("COLUMN_NAME")))
+								attr.setPk("PK");
+						attr.setNullable(rs.getInt("NULLABLE"));
+						columns.add(attr);
 					}
 				}
 		}
 		return columns;
 	}
+
 	public static List<Column> getTables() throws SQLException, ClassNotFoundException
 	{
 		List<Column> tables = new ArrayList<>();
@@ -109,6 +130,7 @@ public class DBData
 		}
 		return tables;
 	}
+
 	private static Connection connectDb() throws ClassNotFoundException, SQLException
 	{
 		Class.forName("oracle.jdbc.driver.OracleDriver");

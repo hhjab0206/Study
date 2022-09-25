@@ -1,9 +1,22 @@
 package Q5;
 
+import java.util.List;
+
 public class Index
 {
 	private String  tableName;
 	private String idxName;
+	private List<String> columnName;
+
+	public List<String> getColumnName()
+	{
+		return columnName;
+	}
+
+	public void setColumnName(List<String> columnName)
+	{
+		this.columnName = columnName;
+	}
 
 	public String getTableName()
 	{
