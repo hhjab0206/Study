@@ -4,10 +4,10 @@ public class Column
 {
 	private String tableName;
 	private String columnName;
-	private String dataType;
-	private int dataLength;
-	private String pk;
-	private int nullable;
+	private String type;
+	private int length;
+	private boolean pk;
+	private boolean nullable;
 
 	public String getTableName()
 	{
@@ -29,43 +29,50 @@ public class Column
 		this.columnName = columnName;
 	}
 
-	public String getDataType()
+	public String getType()
 	{
-		return dataType;
+		return type;
 	}
 
-	public void setDataType(String dataType)
+	public void setType(String type)
 	{
-		this.dataType = dataType;
+		this.type = type;
 	}
 
-	public int getDataLength()
+	public int getLength()
 	{
-		return dataLength;
+		return length;
 	}
 
-	public void setDataLength(int dataLength)
+	public void setLength(int length)
 	{
-		this.dataLength = dataLength;
+		this.length = length;
 	}
 
-	public String getPk()
+	public boolean isPk()
 	{
 		return pk;
 	}
 
-	public void setPk(String pk)
+	public void setPk(boolean pk)
 	{
 		this.pk = pk;
 	}
 
-	public int getNullable()
+	public boolean isNullable()
 	{
 		return nullable;
 	}
 
-	public void setNullable(int nullable)
+	public void setNullable(boolean nullable)
 	{
 		this.nullable = nullable;
 	}
+
+	@Override
+	public String toString()
+	{
+		return tableName;
+	}
 }
+

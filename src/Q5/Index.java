@@ -4,19 +4,9 @@ import java.util.List;
 
 public class Index
 {
-	private String  tableName;
+	private String tableName;
 	private String idxName;
-	private List<String> columnName;
-
-	public List<String> getColumnName()
-	{
-		return columnName;
-	}
-
-	public void setColumnName(List<String> columnName)
-	{
-		this.columnName = columnName;
-	}
+	private List<String> idxColumn;
 
 	public String getTableName()
 	{
@@ -28,8 +18,6 @@ public class Index
 		this.tableName = tableName;
 	}
 
-	private String idxColumn;
-
 	public String getIdxName()
 	{
 		return idxName;
@@ -40,12 +28,12 @@ public class Index
 		this.idxName = idxName;
 	}
 
-	public String getIdxColumn()
+	public List<String> getIdxColumn()
 	{
 		return idxColumn;
 	}
 
-	public void setIdxColumn(String idxColumn)
+	public void setIdxColumn(List<String> idxColumn)
 	{
 		this.idxColumn = idxColumn;
 	}
