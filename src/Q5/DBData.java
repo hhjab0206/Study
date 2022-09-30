@@ -1,5 +1,6 @@
 package Q5;
 
+import java.io.*;
 import java.sql.*;
 import java.util.*;
 
@@ -7,40 +8,47 @@ public class DBData
 {
 	public static void main(String[] args) throws Exception
 	{
-		List<Column> tables = getTables();
+		List<Table> tables = getTables();
 		List<Column> columns = getColumns(tables);
 		List<Index> indexes = getIndexes(tables);
+		writeHtml(tables, columns, indexes);
+	}
 
-		for (Column table : tables)
-			System.out.println(table.getTableName());
-
-		for (Column table : tables)
+	private static void writeHtml(List<Table> tables, List<Column> columns, List<Index> indexes) throws IOException, SQLException, ClassNotFoundException
+	{
+		try (Connection conn = connectDb();
+				PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(new File("C:/study/Study/src/Q5/DBData.html")))))
 		{
-			System.out.println("<" + table.getTableName() + ">");
-			System.out.println("컬럼 명 / 데이터 타입 / 길이 / PK / Null");
-			for (Column column : columns)
-				if (column.getTableName().equals(table.getTableName()))
-					System.out.println(column.getColumnName()
-							+ " / " + column.getType()
-							+ " / " + column.getLength()
-							+ " / " + column.isPk()
-							+ " / " + column.isNullable());
+			writer.println("<!DOCTYPE html><html lang=\"ko\"><head><meta charset=\"UTF-8\"><title>DBData</title><style>" +
+					"table{width : 100%; margin-bottom : 20px; border : 1px solid black; border-collapse:collapse;}" +
+					"th,td{border:1px solid black; padding : 5px 10px;}.colName{width:20%;}.mode{width:35%;}</style></head><body><h3>테이블 명 목록</h3>");
 
-			System.out.println("인덱스 명 / 컬럼");
-			for (Index index : indexes)
-				if (index.getTableName().equals(table.getTableName()))
-					System.out.println(index.getIdxName()
-							+ " / " + String.join(",", index.getIdxColumn()));
-			System.out.println("====================================");
+			for (Table table : tables)
+				writer.println("<p>" + table.getTableName() + "</p>");
+			for (Table table : tables)
+			{
+				writer.println("&lt;" + table.getTableName() + "&gt;<br><table><tr><th class='colName'>컬럼 명</th><th>데이터 타입</th><th>길이</th><th>PK</th><th>Null</th><th class='mode'>최빈값</th></tr>");
+
+				for (Column column : columns)
+					column.writeHtml(writer, table.getTableName(), conn);
+
+
+				writer.println("<tr><th>인덱스 명</th><th colspan='5'>컬럼</th></tr>");
+				for (Index index : indexes)
+					index.writeHtml(writer, table.getTableName());
+
+				writer.println("</table>");
+			}
+			writer.println("</body></html>");
 		}
 	}
 
-	public static List<Index> getIndexes(List<Column> tables) throws SQLException, ClassNotFoundException
+	public static List<Index> getIndexes(List<Table> tables) throws SQLException, ClassNotFoundException
 	{
 		List<Index> indexes = new ArrayList<>();
 		try (Connection conn = connectDb())
 		{
-			for (Column table : tables)
+			for (Table table : tables)
 				try (ResultSet rs = conn.getMetaData().getIndexInfo(null, "NETS", table.getTableName(), false, false))
 				{
 					List<String> columns = null;
@@ -68,40 +76,32 @@ public class DBData
 						}
 					}
 				}
+				catch (SQLException e)
+				{
+					System.out.println(e.getMessage());
+				}
 		}
-		indexes.sort(Comparator.comparing(Index::getIdxName));
+		Collections.sort(indexes);
 		return indexes;
 	}
 
-	public static List<Column> getColumns(List<Column> tables) throws SQLException, ClassNotFoundException
+	public static List<Column> getColumns(List<Table> tables) throws SQLException, ClassNotFoundException
 	{
 		List<Column> columns = new ArrayList<>();
 		try (Connection conn = connectDb())
 		{
-			for (Column table : tables)
+			for (Table table : tables)
 			{
 				Set<String> pks = new HashSet<>();
 				try (ResultSet rsPk = conn.getMetaData().getPrimaryKeys(null, "NETS", table.getTableName()))
 				{
 					while (rsPk.next())
-					{
 						pks.add(rsPk.getString("COLUMN_NAME"));
-					}
 				}
 				try (ResultSet rs = conn.getMetaData().getColumns(null, "NETS", table.getTableName(), null))
 				{
 					while (rs.next())
-					{
-						Column attr = new Column();
-
-						attr.setTableName(rs.getString(3));
-						attr.setColumnName(rs.getString(4));
-						attr.setType(rs.getString(6));
-						attr.setLength(rs.getInt(7));
-						attr.setPk(pks.contains(attr.getColumnName()));
-
-						columns.add(attr);
-					}
+						columns.add(new Column(rs, pks));
 				}
 			}
 		}
@@ -111,20 +111,16 @@ public class DBData
 		return columns;
 	}
 
-	public static List<Column> getTables() throws SQLException, ClassNotFoundException
+	public static List<Table> getTables() throws SQLException, ClassNotFoundException
 	{
-		List<Column> tables = new ArrayList<>();
+		List<Table> tables = new ArrayList<>();
 		try (Connection conn = connectDb();
 			 ResultSet rs = conn.getMetaData().getTables(null, "NETS", null, new String[]{"TABLE"}))
 		{
 			while (rs.next())
-			{
-				Column table = new Column();
-				table.setTableName(rs.getString(3));
-				tables.add(table);
-			}
+				tables.add(new Table(rs.getString(3)));
 		}
-		tables.sort(Comparator.comparing(t -> t.getTableName()));
+		Collections.sort(tables);
 		return tables;
 	}
 
