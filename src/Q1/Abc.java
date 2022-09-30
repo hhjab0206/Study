@@ -6,7 +6,6 @@ import java.util.stream.Stream;
 
 public class Abc
 {
-
 	public static void main(String[] args)
 	{
 		// 1-a
@@ -19,7 +18,6 @@ public class Abc
 		int idx = str.indexOf(":");
 		System.out.println(str.substring(idx +1,str.indexOf(':',idx+1)));
 
-
 		// 1-b
 		String[] arr = new String[]{"aaa", "bbb", "_aaa", "bb_"};
 		for (String obj : arr)
@@ -29,7 +27,6 @@ public class Abc
 		// 람다 : Anonymous 클래스
 		// Arrays.stream(arr).filter(x -> x.startsWith("_")).forEach(v -> System.out.println(v));
 		Arrays.stream(arr).filter(x -> x.startsWith("_")).forEach(System.out::println);
-
 
 		// 1-c
 		for (String obj : arr)

@@ -7,13 +7,26 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 
-public class Column extends Table
+public class Column extends Table implements Comparable<Table>
 {
 	private String columnName;
 	private String type;
 	private int length;
 	private boolean pk;
 	private boolean nullable;
+
+	public int getSeq()
+	{
+		return isPk() ? 1 : isNullable() ? 3 : 2;
+	}
+	@Override
+	public int compareTo(Table t)
+	{
+		Column c = (Column) t;
+		int d = getSeq() - c.getSeq();
+		return d == 0 ? columnName.compareTo(c.columnName) : d;
+	}
+
 	public Column(ResultSet rs, Set<String> pks) throws SQLException
 	{
 		this(rs.getString(3), rs.getString(4), pks.contains(rs.getString(4)), rs.getString(6), rs.getInt(7), rs.getInt(11) != 0);
@@ -117,9 +130,7 @@ public class Column extends Table
 					System.out.println(e.getMessage());
 				}
 			}
+			writer.println("</td></tr>");
 		}
-		writer.println("</td></tr>");
 	}
 }
-
-

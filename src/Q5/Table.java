@@ -14,6 +14,7 @@ public class Table implements Comparable<Table>
 	{
 		return this.tableName.compareTo(t.tableName);
 	}
+
 	public String getTableName()
 	{
 		return tableName;

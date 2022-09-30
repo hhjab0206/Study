@@ -32,7 +32,6 @@ public class DBData
 				for (Column column : columns)
 					column.writeHtml(writer, table.getTableName(), conn);
 
-
 				writer.println("<tr><th>인덱스 명</th><th colspan='5'>컬럼</th></tr>");
 				for (Index index : indexes)
 					index.writeHtml(writer, table.getTableName());
@@ -49,7 +48,7 @@ public class DBData
 		try (Connection conn = connectDb())
 		{
 			for (Table table : tables)
-				try (ResultSet rs = conn.getMetaData().getIndexInfo(null, "NETS", table.getTableName(), false, false))
+				try (ResultSet rs = conn.getMetaData().getIndexInfo(null, "SYSTEM", table.getTableName(), false, false))
 				{
 					List<String> columns = null;
 					String idxName = "";
@@ -93,21 +92,22 @@ public class DBData
 			for (Table table : tables)
 			{
 				Set<String> pks = new HashSet<>();
-				try (ResultSet rsPk = conn.getMetaData().getPrimaryKeys(null, "NETS", table.getTableName()))
+				try (ResultSet rsPk = conn.getMetaData().getPrimaryKeys(null, "SYSTEM", table.getTableName()))
 				{
 					while (rsPk.next())
 						pks.add(rsPk.getString("COLUMN_NAME"));
 				}
-				try (ResultSet rs = conn.getMetaData().getColumns(null, "NETS", table.getTableName(), null))
+				try (ResultSet rs = conn.getMetaData().getColumns(null, "SYSTEM", table.getTableName(), null))
 				{
 					while (rs.next())
 						columns.add(new Column(rs, pks));
 				}
 			}
 		}
-		columns.sort(Comparator.comparing(Column::isPk).reversed()
-				.thenComparing(Column::isNullable)
-				.thenComparing(Column::getColumnName));
+//		columns.sort(Comparator.comparing(Column::isPk).reversed()
+//				.thenComparing(Column::isNullable)
+//				.thenComparing(Column::getColumnName));
+		Collections.sort(columns);
 		return columns;
 	}
 
@@ -115,7 +115,7 @@ public class DBData
 	{
 		List<Table> tables = new ArrayList<>();
 		try (Connection conn = connectDb();
-			 ResultSet rs = conn.getMetaData().getTables(null, "NETS", null, new String[]{"TABLE"}))
+			 ResultSet rs = conn.getMetaData().getTables(null, "SYSTEM", null, new String[]{"TABLE"}))
 		{
 			while (rs.next())
 				tables.add(new Table(rs.getString(3)));
@@ -127,7 +127,7 @@ public class DBData
 	private static Connection connectDb() throws ClassNotFoundException, SQLException
 	{
 		Class.forName("oracle.jdbc.driver.OracleDriver");
-		Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "nets", "nets");
+		Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "system", "nets");
 		System.out.println("연결 성공");
 		return conn;
 	}
