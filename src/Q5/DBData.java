@@ -48,7 +48,7 @@ public class DBData
 		try (Connection conn = connectDb())
 		{
 			for (Table table : tables)
-				try (ResultSet rs = conn.getMetaData().getIndexInfo(null, "SYSTEM", table.getTableName(), false, false))
+				try (ResultSet rs = conn.getMetaData().getIndexInfo(null, "SCOTT", table.getTableName(), false, false))
 				{
 					List<String> columns = null;
 					String idxName = "";
@@ -92,12 +92,12 @@ public class DBData
 			for (Table table : tables)
 			{
 				Set<String> pks = new HashSet<>();
-				try (ResultSet rsPk = conn.getMetaData().getPrimaryKeys(null, "SYSTEM", table.getTableName()))
+				try (ResultSet rsPk = conn.getMetaData().getPrimaryKeys(null, "SCOTT", table.getTableName()))
 				{
 					while (rsPk.next())
 						pks.add(rsPk.getString("COLUMN_NAME"));
 				}
-				try (ResultSet rs = conn.getMetaData().getColumns(null, "SYSTEM", table.getTableName(), null))
+				try (ResultSet rs = conn.getMetaData().getColumns(null, "SCOTT", table.getTableName(), null))
 				{
 					while (rs.next())
 						columns.add(new Column(rs, pks));
@@ -115,7 +115,7 @@ public class DBData
 	{
 		List<Table> tables = new ArrayList<>();
 		try (Connection conn = connectDb();
-			 ResultSet rs = conn.getMetaData().getTables(null, "SYSTEM", null, new String[]{"TABLE"}))
+			 ResultSet rs = conn.getMetaData().getTables(null, "SCOTT", null, new String[]{"TABLE"}))
 		{
 			while (rs.next())
 				tables.add(new Table(rs.getString(3)));
@@ -127,7 +127,7 @@ public class DBData
 	private static Connection connectDb() throws ClassNotFoundException, SQLException
 	{
 		Class.forName("oracle.jdbc.driver.OracleDriver");
-		Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "system", "nets");
+		Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "scott", "tiger");
 		System.out.println("연결 성공");
 		return conn;
 	}
